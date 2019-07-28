@@ -1,0 +1,555 @@
+<html>
+    <head>
+    
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+    crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style>
+        ul {
+          position: absolute;
+          height:250px;
+          width:200px;
+          overflow: scroll;
+          margin: 0;
+          padding: 0;
+          
+          // Again, this is where the magic happens
+          -webkit-overflow-scrolling: touch;
+        }
+    </style>
+    </head>
+    
+    <body>
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-striped" id="mytable">
+                  
+                </table>
+            </div>
+        <!--</div>
+        
+       <br>
+       
+        
+           
+            
+
+            <div class="container">-->
+                <div class="row">
+                 <div class="col">
+                     Select Level:<select id="levels" class="form-control">
+                                         <!--<option value=""></option>-->    
+                                </select>
+                </div>
+                <div class="col">
+                    Select Column:<select id="columns" class="form-control">
+                            <!--<option value=""></option>-->
+                                  </select>
+                </div>
+                </div>
+                
+
+                <!--<button class="pop">Populate</button>-->
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button class="pop btn btn-primary">Populate</button>
+                    <!--<span class="input-group-text">Expression</span>-->
+                  </div>
+                  <input type="text" class="form-control"  aria-label="Username" aria-describedby="expr" id="expr"
+                    placeholder="Expression">
+                </div>
+
+                <div class="row">
+                    
+                    <div class="col-md">
+                          <input type="text" class="form-control" id="search" aria-label="Username" aria-describedby="search" placeholder="Attribute">
+                          <!--<input type="text" id="search" placeholder="Attribute"/>-->
+                            <ul id="myselect" class="list-group" style="list-style: none;">
+                            </ul>
+                    </div>
+
+                    <div class="col-md">
+                      <input type="text" class="form-control" id="searchop" aria-label="Username" aria-describedby="search" placeholder="Operator">
+                      <!--<input type="text" id="searchop" placeholder="Operator"/>-->
+                        <ul id="myselectop" class="list-group" style="list-style: none;">
+                        </ul>
+                     </div>
+
+                    <div class="col-md">
+                      <input type="text" class="form-control" id="searchfun" aria-label="Username" aria-describedby="search" placeholder="Function">
+                      <!--<input type="text" id="searchfun" placeholder="Function"/>-->
+                      <ul id="myselectfun" class="list-group" style="list-style: none;">
+                        </ul>
+                    </div>
+
+                    <div class="col-md">
+                        <textarea class="form-control" rows="8" id="help"></textarea>
+                    </div>
+
+                </div>
+
+
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            
+
+        
+    <div>
+
+            
+            <script>
+
+                
+                $( function() {
+
+
+
+                    var src=["Src1","Src2"]
+
+                    var levels=["A","B","C","D","E"]
+
+                    var columns=["1","2","3","4","5"]
+
+                    var lev2src = new Map([["A","Src1"],["B","Src2"],["C","Src2"],
+                                            ["D","Src1"],["E","Src1"]])
+                    
+                    var col2expr = new Map()
+
+                    var lev2col2expr = new Map()
+
+                    for(x=0;x<levels.length;x++)
+                    {
+                        lev2col2expr.set(levels[x],new Map())
+                        var m = lev2col2expr.get(levels[x]) 
+                        for(y=0;y<columns.length;y++)
+                        {
+                            m.set(columns[y],"")
+                        }
+                        lev2col2expr.set(levels[x],m)
+                    }
+                    console.log(lev2col2expr)
+
+                    var data=new Map([["Src1",["ABC", "DEF", "AJK", "AEZ", "DDAK"]],
+                                        ["Src2",["ABC", "DEF", "AJK", "AEZ", "DDZK","mkmk"]]])
+
+                    var operators=["+","-","*","/","AND","OR","NOT"]
+
+                    var functions=["CAST()","CHAR_AT()","IF()","INSTR()","DATEtoSTRING()"]
+
+                    
+
+                    var t=document.getElementById("mytable")
+                    /*var row = t.insertRow(0);
+                    for (i = 0; i < columns.length; i++) {
+                        //console.log(columns[i])
+                        var headerCell = document.createElement("th");
+                        headerCell.innerHTML = columns[i];
+                        row.appendChild(headerCell);
+                    }*/
+
+                    for(r=0;r<levels.length;r++)
+                    {
+                        var x=t.insertRow(r);
+                       for(c=0;c<columns.length;c++)  
+                        {
+                            /*if(r==0)
+                            {
+                                var headerCell = document.createElement("th");
+                                headerCell.innerHTML = columns[i];
+                                x.insertCell(headerCell)
+                            }
+                            else{*/
+                             var y=  x.insertCell(c);
+                             if(r==0 && c==0)
+                                y.id="start"
+                                y.innerHTML=""
+                                y.style.height="20" 
+                                y.style.width="40" 
+                            //}
+                        }
+                    }
+
+                    var start = document.getElementById('start');
+                    start.focus();
+                    start.style.backgroundColor = '#81fe87';
+                    start.style.color = 'white';
+
+                    function dotheneedful(sibling) {
+                      if (sibling != null && sibling.tagName!=="TH") {
+                        start.focus();
+                        start.style.backgroundColor = '';
+                        start.style.color = '';
+                        sibling.focus();
+                        sibling.style.backgroundColor = '#81fe87';
+                        sibling.style.color = 'white';
+                        start = sibling;
+                        //console.log(sibling.cellIndex+" "+sibling.parentNode.rowIndex)
+                        document.getElementById("levels").value=levels[sibling.parentNode.rowIndex]
+                        document.getElementById("columns").value=columns[sibling.cellIndex]
+                        var l = document.getElementById("levels").value
+                        var col = document.getElementById("columns").value
+                        //console.log(l+" "+col)
+                        if(lev2col2expr.has(l))
+                        {
+                            var m=lev2col2expr.get(l)
+                            if(m.has(col))
+                                document.getElementById("expr").value=m.get(col)
+                            else
+                                document.getElementById("expr").value=""
+                        }
+                        else
+                            document.getElementById("expr").value=""
+
+                        var src=lev2src.get(l);
+                        var d=data.get(src);
+                        //console.log(d)
+                        //document.getElementById("columns").selectedIndex = 0
+                        $(myselect).empty();
+                        for(var x=0;x<d.length;x++)
+                        {
+                            //op += '<option value="'+d[x]+'">';
+                            $(myselect).append('<li><span class="list-group-item attr">'+d[x]+'</span></li>');
+                            foooo();
+                        }
+                      }
+                    }
+
+                    document.onkeydown = checkKey;
+
+                    function checkKey(e) {
+                      e = e || window.event;
+                      if (e.keyCode == '38') {
+                        // up arrow
+                        if(document.activeElement.id!="expr"){
+                        var idx = start.cellIndex;
+                        var nextrow = start.parentElement.previousElementSibling;
+                        if (nextrow != null) {
+                          var sibling = nextrow.cells[idx];
+                          dotheneedful(sibling);}
+                        }
+                      } else if (e.keyCode == '40') {
+                        // down arrow
+                        if(document.activeElement.id!="expr"){
+                        var idx = start.cellIndex;
+                        /*var row=document.getElementById("levels").selectedIndex
+                        var column=document.getElementById("columns").selectedIndex
+                        if(row!==levels.length-1){
+                        var sibling=document.getElementById("mytable")
+                                .rows[row+1]
+                                .cells[column]
+                                dotheneedful(sibling);
+                            }*/
+                        var nextrow = start.parentElement.nextElementSibling;
+                        if (nextrow != null) {
+                          var sibling = nextrow.cells[idx];
+                          dotheneedful(sibling);}
+                        }
+                      } else if (e.keyCode == '37') {
+                        // left arrow
+                        if(document.activeElement.id!="expr"){
+                        var sibling = start.previousElementSibling;
+                        dotheneedful(sibling);}
+                      } else if (e.keyCode == '39') {
+                        // right arrow
+                        if(document.activeElement.id!="expr"){
+                        var sibling = start.nextElementSibling;
+                        dotheneedful(sibling);}
+                      }
+                    }
+
+                    
+
+                    var levcount=1
+
+                    var lev = document.getElementById("levels")
+                    for (var i = 0; i < levels.length; i++) {
+                    var option = document.createElement("OPTION");
+    
+                    //Set Customer Name in Text part.
+                    option.innerHTML = levels[i];
+    
+                    //Set CustomerId in Value part.
+                    option.value = levels[i];
+    
+                    //Add the Option element to DropDownList.
+                    lev.options.add(option);
+                        }
+                    
+                    var c=document.getElementById("columns")
+                    for(x=0;x<columns.length;x++)
+                    {
+                        var option = document.createElement("OPTION");
+        
+                        //Set Customer Name in Text part.
+                        option.innerHTML = columns[x];
+        
+                        //Set CustomerId in Value part.
+                        option.value = columns[x]//x;
+        
+                        //Add the Option element to DropDownList.
+                        c.options.add(option);
+                    }
+
+                    var d=data.get(lev2src.get(document.getElementById("levels").value));
+                    $(myselect).empty();
+                    for(var x=0;x<d.length;x++)
+                    {
+                        //op += '<option value="'+d[x]+'">';
+                        $(myselect).append('<li><span class="list-group-item attr">'+d[x]+'</span></li>');
+                        foooo();
+                    }
+
+                    for(var x=0;x<operators.length;x++)
+                    {
+                        //op += '<option value="'+d[x]+'">';
+                        $(myselectop).append('<li><span class="list-group-item attr">'+operators[x]+'</span></li>');
+                        foooo();
+                    }
+
+                    for(var x=0;x<functions.length;x++)
+                    {
+                        //op += '<option value="'+d[x]+'">';
+                        $(myselectfun).append('<li><span class="list-group-item attr">'+functions[x]+'</span></li>');
+                        foooo();
+                    }
+                    
+                    $("#levels").change(function()
+                    {
+                        var l = document.getElementById("levels").value
+                        var src=lev2src.get(l);
+                        var d=data.get(src);
+                        console.log(d)
+                        document.getElementById("columns").selectedIndex = 0
+                        $(myselect).empty();
+                        for(var x=0;x<d.length;x++)
+                        {
+                            //op += '<option value="'+d[x]+'">';
+                            $(myselect).append('<li><span class="list-group-item attr">'+d[x]+'</span></li>');
+                            foooo();
+                        }
+                        var l = document.getElementById("levels").value
+                        var col = document.getElementById("columns").value
+                        console.log(l+" "+col)
+                        if(lev2col2expr.has(l))
+                        {
+                            var m=lev2col2expr.get(l)
+                            if(m.has(col))
+                                document.getElementById("expr").value=m.get(col)
+                            else
+                                document.getElementById("expr").value=""
+                        }
+                        else
+                            document.getElementById("expr").value=""
+
+                        var cell=document.getElementById("mytable")
+                        .rows[document.getElementById("levels").selectedIndex]
+                        .cells[document.getElementById("columns").selectedIndex]
+                        
+                        dotheneedful(cell)
+                        document.getElementById("levels").blur();
+                    })
+
+                    $("#columns").change(function()
+                    {
+                        var l = document.getElementById("levels").value
+                        var col = document.getElementById("columns").value
+                        console.log(l+" "+col)
+                        if(lev2col2expr.has(l))
+                        {
+                            var m=lev2col2expr.get(l)
+                            if(m.has(col))
+                                document.getElementById("expr").value=m.get(col)
+                            else
+                                document.getElementById("expr").value=""
+                        }
+                        else
+                            document.getElementById("expr").value=""
+                        var row=document.getElementById("levels").selectedIndex
+                        var column=document.getElementById("columns").selectedIndex
+                        console.log(row+" "+column)
+                        var cell=document.getElementById("mytable")
+                        .rows[row]
+                        .cells[column]
+                        
+                        dotheneedful(cell)
+                        document.getElementById("columns").blur();
+                    })
+              
+              
+                $("#search").on('input',function(){
+                    var s=document.getElementById("search").value
+                    var reg=new RegExp(s, "i")
+                    var l = document.getElementById("levels").value
+                    var src=lev2src.get(l);
+                    var d=data.get(src);
+                    console.log(d)
+                    var arr=[]
+                    for(x=0;x<d.length;x++)
+                    {
+                    if((d[x]).match(reg))
+                    {
+                        arr.push(d[x])
+                        //console.log(d[x])
+                    }
+                    else
+                    {
+                        //console.log("No match");
+                    }
+                    }
+                    console.log("\n");
+                    $(myselect).empty();
+                    for(x=0;x<arr.length;x++)
+                    {
+                        $(myselect).append('<li><span class="list-group-item attr">'+arr[x]+'</span></li>');
+                        foooo();
+                    }
+                })
+
+                $("#searchfun").on('input',function(){
+                    var s=document.getElementById("searchfun").value
+                    var reg=new RegExp(s, "i")
+                    
+                    var arr=[]
+                    for(x=0;x<functions.length;x++)
+                    {
+                    if((functions[x]).match(reg))
+                    {
+                        arr.push(functions[x])
+                        //console.log(functions[x])
+                    }
+                    else
+                    {
+                        //console.log("No match");
+                    }
+                    }
+                    console.log("\n");
+                    $(myselectfun).empty();
+                    for(x=0;x<arr.length;x++)
+                    {
+                        $(myselectfun).append('<li><span class="list-group-item attr">'+arr[x]+'</span></li>');
+                        foooo();
+                    }
+                })
+
+                $("#searchop").on('input',function(){
+                    var s=document.getElementById("searchop").value
+                    if(s=="+"||s=="*")
+                        s="\\"+s
+                    var reg=new RegExp(s, "i")
+                    
+                    var arr=[]
+                    for(x=0;x<operators.length;x++)
+                    {
+                    if((operators[x]).match(reg))
+                    {
+                        arr.push(operators[x])
+                        //console.log(operators[x])
+                    }
+                    else
+                    {
+                        //console.log("No match");
+                    }
+                    }
+                    $(myselectop).empty();
+                    for(x=0;x<arr.length;x++)
+                    {
+                        $(myselectop).append('<li><span class=" list-group-item attr">'+arr[x]+'</span></li>');
+                        foooo();
+                    }
+                })
+
+                function foooo(){
+                $(".attr").unbind("dblclick").dblclick(function () {
+                    console.log($(this).text())
+                    var val=document.getElementById("expr").value;
+                    document.getElementById("expr").value = val+$(this).text();
+                    document.getElementById("search").value = ""
+                    $("#search").trigger("input")
+                    document.getElementById("searchop").value = ""
+                    $("#searchop").trigger("input")
+                    document.getElementById("searchfun").value = ""
+                    $("#searchfun").trigger("input")
+                    
+                });
+            }
+
+            $(".pop").click(function()
+            {
+                //console.log(document.getElementById("columns").value)
+                var m=lev2col2expr.get(document.getElementById("levels").value)
+                var val = document.getElementById("expr").value
+                if(val==="")
+                    val="null"
+                m.set(document.getElementById("columns").value,val)
+                lev2col2expr.set(document.getElementById("levels").value,m)
+                console.log(lev2col2expr)
+                col2expr.set(document.getElementById("columns").value,val)
+                document.getElementById("mytable")
+                .rows[document.getElementById("levels").selectedIndex]
+                .cells[document.getElementById("columns").selectedIndex]
+                .innerHTML = val
+
+                 document.getElementById("expr").value=""
+                if(document.getElementById("columns").selectedIndex!=columns.length-1)
+                    {document.getElementById("columns").selectedIndex = 
+                     document.getElementById("columns").selectedIndex+1;
+                    //console.log("b"+document.getElementById("columns").value)
+                    }
+                    else
+                    {
+                        document.getElementById("columns").selectedIndex = 0
+                        /*document.getElementById("levels").selectedIndex = 
+                        document.getElementById("levels").selectedIndex + 1
+                        if(document.getElementById("levles").selectedIndex==levels.length)
+                            document.getElementById("levels").selectedIndex = 0*/
+                    }
+
+                    var cell=document.getElementById("mytable")
+                .rows[document.getElementById("levels").selectedIndex]
+                .cells[document.getElementById("columns").selectedIndex]
+                
+                dotheneedful(cell)
+
+                console.log(col2expr)
+                document.getElementById("help").value = ""
+                })
+
+            $("#expr").select(function()
+            {
+              var textComponent = document.getElementById("expr");
+              var selectedText;
+
+              if (textComponent.selectionStart !== undefined)
+              {// Standards Compliant Version
+                var startPos = textComponent.selectionStart;
+                var endPos = textComponent.selectionEnd;
+                selectedText = textComponent.value.substring(startPos, endPos);
+              }
+              else if (document.selection !== undefined)
+              {// IE Version
+                textComponent.focus();
+                var sel = document.selection.createRange();
+                selectedText = sel.text;
+              }
+              document.getElementById("help").value = selectedText
+              //console.log("You selected: " + selectedText);
+            })
+        });
+            </script>
+     </div>
+    </body>
+</html>
